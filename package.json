@@ -17,7 +17,7 @@
   "license": "MIT",
   "type": "module",
   "exports": {
-    ".": "./reactiveSidebar.js"
+    ".": "./ReactiveSidebar.js"
   },
   "repository": {
     "type": "git",
