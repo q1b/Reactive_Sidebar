@@ -1,0 +1,26 @@
+{
+  "name": "reactive-astro-sidebar",
+  "version": "0.0.1",
+  "description": "Reactive Astro Sidebar will make your sidebar reactive as it promise to react when ever the main content of your docs change and update itself to highlight that, hope that It will make you life easier.",
+  "keywords": [
+    "Sidebar",
+    "astro",
+    "reactive-sidebar",
+    "astro-component",
+    "astro-comp",
+    "reactive-astro-sidebar",
+    "right-sidebar",
+    "reactive-right-sidebar",
+    "reactive-content-table"
+  ],
+  "homepage": "https://github.com/sacarvy/Reactive_Sidebar#README",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./reactiveSidebar.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sacarvy/Reactive_Sidebar.git"
+  }
+}
