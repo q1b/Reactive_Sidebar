@@ -12,8 +12,8 @@ let {
     staticClass,
     activeClass,
     inActiveClass,
-    activeLiClass,
-    inActiveLiClass,
+    activeLinkClass,
+    inActiveLinkClass,
 } = Astro.props;
 
 if (typeof staticClass === 'object') {
@@ -151,7 +151,7 @@ let arrowDepthHeadings = returnArrows(headers,"text");
 let arrowDepthSlug = returnArrows(headers,"slug");
 
 ---
-<ul class={`flex flex-col overflow-y-auto sc font-sans ${containerClass} ${groupContainerClass} ${inActiveLiClass}`}>
+<ul class={`flex flex-col overflow-y-auto sc font-sans ${containerClass} ${groupContainerClass}`}>
 {
    Object.keys(arrowDepthHeadings).map((i,index)=>{
      return (
@@ -165,7 +165,7 @@ let arrowDepthSlug = returnArrows(headers,"slug");
        >
          {
            Object.keys(arrowDepthHeadings[i]).length===0 ? null : (
-             <ul class={`flex flex-col relative ${groupContainerClass} ${inActiveLiClass ?? ''}`}>
+             <ul class={`flex flex-col relative ${groupContainerClass}`}>
                {
                  Object.keys(arrowDepthHeadings[i]).map((j,jIndex)=>{
                    return(
@@ -179,7 +179,7 @@ let arrowDepthSlug = returnArrows(headers,"slug");
                      >
                        {
                          Object.keys(arrowDepthHeadings[i][j]).length===0 ? null : (
-                           <ul class={`flex flex-col relative ${groupContainerClass} ${inActiveLiClass ?? ''}`}>
+                           <ul class={`flex flex-col relative ${groupContainerClass}`}>
                              {
                                Object.keys(arrowDepthHeadings[i][j]).map((k,kIndex) => {
                                  return (
@@ -210,7 +210,7 @@ let arrowDepthSlug = returnArrows(headers,"slug");
    })
  }
 </ul>
-<script hoist define:vars={{headers,activeClass,activeLiClass,activeGroupClass,inActiveClass,inActiveLiClass,inActiveGroupClass}}>
+<script hoist define:vars={{headers,activeClass,activeLinkClass,activeGroupClass,inActiveClass,inActiveLinkClass,inActiveGroupClass}}>
 let elementsDetails = {};
 
 let scrolling = "down";
@@ -233,9 +233,9 @@ function addClass(elementId, Classes) {
 function applyActiveClass(elementName, elementId) {
   removeClass(elementId, inActiveClass[elementName]);
   addClass(elementId, activeClass[elementName]);
-  if(activeLiClass !== undefined){
-    document.getElementById(elementId).parentElement.classList.remove(inActiveLiClass);
-    document.getElementById(elementId).parentElement.classList.add(activeLiClass);
+  if(activeLinkClass !== undefined){
+    document.getElementById(elementId).parentElement.classList.remove(inActiveLinkClass);
+    document.getElementById(elementId).parentElement.classList.add(activeLinkClass);
   }
   if(activeGroupClass !== undefined){
     document.getElementById(elementId).parentElement.parentElement.classList.remove(inActiveGroupClass);
@@ -246,9 +246,9 @@ function applyActiveClass(elementName, elementId) {
 function applyInactiveClass(elementName, elementId) {
   removeClass(elementId, activeClass[elementName]);
   addClass(elementId, inActiveClass[elementName]);
-  if(activeLiClass !== undefined){
-    document.getElementById(elementId).parentElement.classList.remove(activeLiClass);
-    document.getElementById(elementId).parentElement.classList.add(inActiveLiClass);
+  if(activeLinkClass !== undefined){
+    document.getElementById(elementId).parentElement.classList.remove(activeLinkClass);
+    document.getElementById(elementId).parentElement.classList.add(inActiveLinkClass);
   }
   if(activeGroupClass!== undefined){
     document.getElementById(elementId).parentElement.parentElement.classList.remove(activeGroupClass);
