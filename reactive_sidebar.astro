@@ -1,6 +1,5 @@
 ---
-import DocItem from "./doc_item.astro";
-
+import TableOfContent from "../components/tableOfContent.astro"
 let { 
     headers,
     containerClass,
@@ -109,107 +108,60 @@ if (typeof inActiveClass === 'object') {
         h4: inActiveClass.split(' '),
     }
 }
-
-function returnArrows(arr,type) {
-    const arr_itr = arr[Symbol.iterator]();
-    let result = {};
-    let prev;
-    while(true){
-        let b = arr_itr.next();
-        if(prev == undefined)
-            prev = b;
-        while ( b.value?.depth >= prev.value?.depth) {
-            let prev1 = b;
-            result[b.value[type]] = {};
-            b = arr_itr.next();
-            while (b.value?.depth > prev1.value?.depth) {
-                let prev2 = b;
-                b = arr_itr.next();
-                result[prev1.value[type]][prev2.value[type]] = {};
-                while (b.value?.depth > prev2.value?.depth) {
-                    let prev3 = b;
-                    b = arr_itr.next();
-                    result[prev1.value[type]][prev2.value[type]][prev3.value[type]] = {};
-                    while (b.value?.depth > prev3.value?.depth) {
-                        let prev4 = b;
-                        b = arr_itr.next();
-                        result[prev1.value[type]][prev2.value[type]][prev3.value[type]][prev4.value[type]] = {};
-                    }
-                }
-            }
-        }
-        if (b.done) {
-          break;
-        }
-        prev = b;
+    function menuObj(text:String, link:String, depth:number, header?:any ) {
+        if(header)
+            return {text,link,depth,header}
+        return {text,link,depth}
     }
-    return result;
-}
 
-let arrowDepthHeadings = returnArrows(headers,"text");
-
-let arrowDepthSlug = returnArrows(headers,"slug");
-
+    function getMenuWithWhile(arr) {
+      const arr_itr = arr[Symbol.iterator]();
+      let result = [];
+      let prev;
+      while (true) {
+        let b = arr_itr.next();
+        if (prev === undefined) prev = b;
+        while (b.value?.depth >= prev.value?.depth) {
+          let prev1 = b;
+          b = arr_itr.next();
+          let r2 = [];
+          while (b.value?.depth > prev1.value?.depth) {
+            let prev2 = b;
+            b = arr_itr.next();
+            let r3 = [];
+            while (b.value?.depth > prev2.value?.depth) {
+              let prev3 = b;
+              b = arr_itr.next();
+              let r4 = [];
+              while (b.value?.depth > prev3.value?.depth) {
+                let prev4 = b;
+                r4 = [...r4, menuObj(prev4.value?.text,prev4.value?.slug,prev4?.value.depth)];
+                b = arr_itr.next();
+              }
+              r3 = [...r3, menuObj(prev3.value?.text,prev3.value?.slug,prev3?.value.depth,r4)];
+            }
+            r2 = [...r2, menuObj(prev2.value?.text,prev2.value?.slug,prev2?.value.depth,r3)];
+          }
+          result = [...result, menuObj(prev1.value?.text,prev1.value?.slug,prev1?.value.depth,r2)];
+        }
+        if (b.done)
+          break;
+        prev = b;
+      }
+      return result;
+    }
 ---
-<ul class={`flex flex-col overflow-y-auto sc font-sans ${containerClass} ${groupContainerClass}`}>
-{
-   Object.keys(arrowDepthHeadings).map((i,index)=>{
-     return (
-       <DocItem
-       {inActiveClass}  
-        id={Object.keys(arrowDepthSlug)[index]+'-link'}  
-         link={'#'+Object.keys(arrowDepthSlug)[index]} 
-         title={`${i}`}
-         {groupClass} {staticClass} {linkClass}
-         depth={2}
-       >
-         {
-           Object.keys(arrowDepthHeadings[i]).length===0 ? null : (
-             <ul class={`flex flex-col relative ${groupContainerClass}`}>
-               {
-                 Object.keys(arrowDepthHeadings[i]).map((j,jIndex)=>{
-                   return(
-                     <DocItem
-                        {inActiveClass}
-                        id={Object.keys(Object.values(arrowDepthSlug)[index])[jIndex]+'-link'}  
-                        link={'#'+Object.keys(Object.values(arrowDepthSlug)[index])[jIndex]}
-                        title={`${j}`}
-                        {groupClass} {staticClass}  {linkClass}
-                        depth={3}
-                     >
-                       {
-                         Object.keys(arrowDepthHeadings[i][j]).length===0 ? null : (
-                           <ul class={`flex flex-col relative ${groupContainerClass}`}>
-                             {
-                               Object.keys(arrowDepthHeadings[i][j]).map((k,kIndex) => {
-                                 return (
-                                   <DocItem
-                                   {inActiveClass} 
-                                    id={Object.keys(Object.values(Object.values(arrowDepthSlug)[index])[jIndex])[kIndex]+'-link'}
-                                     link={'#'+Object.keys(Object.values(Object.values(arrowDepthSlug)[index])[jIndex] )[kIndex]}  
-                                     title={` ${k}`}
-                                     {groupClass} {staticClass}  {linkClass}
-                                     depth={4}
-                                   >
-                                   </DocItem>
-                                 )
-                               })
-                             }
-                           </ul>
-                         )
-                       }
-                     </DocItem>
-                   )
-                 })
-               }
-             </ul>
-           )
-         }
-       </DocItem>
-     )
-   })
- }
-</ul>
+<TableOfContent headers={getMenuWithWhile(headers)} 
+    {groupContainerClass} 
+    {containerClass} 
+    {staticClass} 
+    {linkClass} 
+    {groupClass} 
+    {activeGroupClass} 
+    {inActiveGroupClass} 
+    {inActiveClass}
+/>
+
 <script hoist define:vars={{headers,activeClass,activeLinkClass,activeGroupClass,inActiveClass,inActiveLinkClass,inActiveGroupClass}}>
 let elementsDetails = {};
 
@@ -220,7 +172,7 @@ let prev_h2;
 let prev_h3;
 let prev_h4;
 
-
+console.log(headers)
 // Utility functions
 function removeClass(elementId, Classes) {
   document.getElementById(elementId).classList.remove(...Classes);
