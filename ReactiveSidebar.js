@@ -1,3 +1,3 @@
-import ReactiveSidebar from './reactive_sidebar.astro'
+import ReactiveSidebar from './ReactiveSidebar.astro'
 
 export default ReactiveSidebar;

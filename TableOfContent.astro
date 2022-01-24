@@ -1,5 +1,5 @@
 ---
-import DocItem from "./table_item.astro"
+import TableItem from "./TableItem.astro"
 const { 
     headers,
     transfromed=false,
@@ -19,13 +19,13 @@ const Self = $$Component;
 {
     docsItems.map(
       docItem => (
-        <DocItem {docItem} {groupClass} {linkClass} {staticClass} {inActiveClass}  >
+        <TableItem {docItem} {groupClass} {linkClass} {staticClass} {inActiveClass}  >
           {
               docItem.header && (
                 <Self headers={docItem.header} transfromed={true} {groupClass} {linkClass} {staticClass} {inActiveClass} {containerClass} {groupContainerClass} />
               )
           }
-        </DocItem>
+        </TableItem>
       )
     )
   }  
