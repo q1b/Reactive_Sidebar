@@ -12,7 +12,7 @@ const {
 }= Astro.props;
 
 let docsItems = headers;
-const Self = $$Component;
+const Self = Astro.self;
 ---
 
 <ul class={ transfromed ? `flex flex-col relative ${groupContainerClass}` : `flex flex-col overflow-y-auto sc font-sans ${containerClass} ${groupContainerClass}` } >
