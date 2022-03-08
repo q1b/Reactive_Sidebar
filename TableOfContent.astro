@@ -17,7 +17,7 @@ const Self = $$Component;
 
 <ul class={ transfromed ? `flex flex-col relative ${groupContainerClass}` : `flex flex-col overflow-y-auto sc font-sans ${containerClass} ${groupContainerClass}` } >
 {
-    docsItems.map(
+   docsItems.map(
       docItem => (
         <TableItem {docItem} {groupClass} {linkClass} {staticClass} {inActiveClass}  >
           {

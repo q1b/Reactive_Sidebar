@@ -1,6 +1,8 @@
 ---
 import TableOfContent from "./TableOfContent.astro"
-let { 
+import { toTree,arrange } from "./utils";
+import type { Header } from "./utils"
+let {
     headers,
     containerClass,
     groupContainerClass,
@@ -108,50 +110,11 @@ if (typeof inActiveClass === 'object') {
         h4: inActiveClass.split(' '),
     }
 }
-    function menuObj(text:String, link:String, depth:number, header?:any ) {
-        if(header)
-            return {text,link,depth,header}
-        return {text,link,depth}
-    }
 
-    function getMenuWithWhile(arr) {
-      const arr_itr = arr[Symbol.iterator]();
-      let result = [];
-      let prev;
-      while (true) {
-        let b = arr_itr.next();
-        if (prev === undefined) prev = b;
-        while (b.value?.depth >= prev.value?.depth) {
-          let prev1 = b;
-          b = arr_itr.next();
-          let r2 = [];
-          while (b.value?.depth > prev1.value?.depth) {
-            let prev2 = b;
-            b = arr_itr.next();
-            let r3 = [];
-            while (b.value?.depth > prev2.value?.depth) {
-              let prev3 = b;
-              b = arr_itr.next();
-              let r4 = [];
-              while (b.value?.depth > prev3.value?.depth) {
-                let prev4 = b;
-                r4 = [...r4, menuObj(prev4.value?.text,prev4.value?.slug,prev4?.value.depth)];
-                b = arr_itr.next();
-              }
-              r3 = [...r3, menuObj(prev3.value?.text,prev3.value?.slug,prev3?.value.depth,r4)];
-            }
-            r2 = [...r2, menuObj(prev2.value?.text,prev2.value?.slug,prev2?.value.depth,r3)];
-          }
-          result = [...result, menuObj(prev1.value?.text,prev1.value?.slug,prev1?.value.depth,r2)];
-        }
-        if (b.done)
-          break;
-        prev = b;
-      }
-      return result;
-    }
+let transfromedHeader:Header[] = arrange([...headers]);
+let treeHeader = toTree(transfromedHeader);
 ---
-<TableOfContent headers={getMenuWithWhile(headers)} 
+<TableOfContent headers={treeHeader}
     {groupContainerClass} 
     {containerClass} 
     {staticClass} 

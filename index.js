@@ -1,3 +1,1 @@
-import ReactiveSidebar from './ReactiveSidebar.astro'
-
-export default ReactiveSidebar;
+export { default as ReactiveSidebar } from "./ReactiveSidebar.astro";
